@@ -52,6 +52,18 @@ func (l *Lexer) NextToken() token.Token {
 		tokType = token.LBRACE
 	case '}':
 		tokType = token.RBRACE
+	case '!':
+		tokType = token.NEGATION
+	case '<':
+		tokType = token.LT
+	case '>':
+		tokType = token.GT
+	case '/':
+		tokType = token.SLASH
+	case '*':
+		tokType = token.ASTERISK
+	case '-':
+		tokType = token.MINUS
 	case 0:
 		tokType = token.EOF
 		lit = ""

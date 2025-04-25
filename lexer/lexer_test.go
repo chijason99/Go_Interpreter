@@ -36,13 +36,17 @@ func Test_Token(t *testing.T) {
 	}
 }
 
-func TestNextToken(t *testing.T){
+func Test_Next_Token(t *testing.T){
 	input := `let five = 5;
 		let ten = 10;
 
 		let add = func(x, y){
 			return x + y;
 		};
+
+		!-/*5;
+
+		5 < 10 > 5;
 
 		let result = add(five, ten);
 	`
@@ -77,7 +81,19 @@ func TestNextToken(t *testing.T){
 		{ token.IDENT, "y"},		
 		{ token.SEMICOLON, ";"},		
 		{ token.RBRACE, "}"},
-		{ token.SEMICOLON, ";"},		
+		{ token.SEMICOLON, ";"},
+		{ token.NEGATION, "!"},		
+		{ token.MINUS, "-"},		
+		{ token.SLASH, "/"},		
+		{ token.ASTERISK, "*"},		
+		{ token.INT, "5"},		
+		{ token.SEMICOLON, ";"},
+		{ token.INT, "5"},
+		{ token.LT, "<"},
+		{ token.INT, "10"},	
+		{ token.GT, ">"},	
+		{ token.INT, "5"},
+		{ token.SEMICOLON, ";"},
 		{ token.LET, "let"},
 		{ token.IDENT, "result"},		
 		{ token.ASSIGN, "="},
