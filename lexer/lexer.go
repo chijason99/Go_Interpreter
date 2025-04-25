@@ -37,7 +37,15 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '=':
-		tokType = token.ASSIGN
+		if l.peekChar() == '=' {
+			current := l.ch
+			l.readChar()
+			
+			tokType = token.EQ
+			lit = string(current) + string(l.ch)
+		} else {
+			tokType = token.ASSIGN
+		}
 	case '+':
 		tokType = token.PLUS
 	case ',':
@@ -53,11 +61,35 @@ func (l *Lexer) NextToken() token.Token {
 	case '}':
 		tokType = token.RBRACE
 	case '!':
-		tokType = token.NEGATION
+		if l.peekChar() == '=' {
+			current := l.ch
+			l.readChar()
+			
+			tokType = token.NOT_EQ
+			lit = string(current) + string(l.ch)
+		} else {
+			tokType = token.NEGATION
+		}
 	case '<':
-		tokType = token.LT
+		if l.peekChar() == '=' {
+			current := l.ch
+			l.readChar()
+			
+			tokType = token.LE
+			lit = string(current) + string(l.ch)
+		} else {
+			tokType = token.LT
+		}
 	case '>':
-		tokType = token.GT
+		if l.peekChar() == '=' {
+			current := l.ch
+			l.readChar()
+			
+			tokType = token.GE
+			lit = string(current) + string(l.ch)
+		} else {
+			tokType = token.GT
+		}
 	case '/':
 		tokType = token.SLASH
 	case '*':
@@ -73,19 +105,18 @@ func (l *Lexer) NextToken() token.Token {
 			tokType = token.LookUpIdentifier(lit)
 
 			// Return early to avoid readChar later that would skip the current character
-			return token.Token{ Type: tokType, Literal: lit }
+			return newToken(tokType, lit)
 		} else if isDigit(l.ch) {
 			lit = l.readNumber()
-			tokType = token.INT
 
 			// Return early to avoid readChar later that would skip the current character
-			return token.Token{ Type: tokType, Literal: lit }
+			return newToken(token.INT, lit)
 		}else {
 			tokType = token.ILLEGAL
 		}
 	}
 
-	tok := token.Token{Type: tokType, Literal: lit}
+	tok := newToken(tokType, lit)
 	l.readChar()
 
 	return tok
@@ -123,4 +154,17 @@ func (l *Lexer) skipWhiteSpace(){
 	for l.ch == ' ' || l.ch == '\r' || l.ch == '\n' || l.ch == '\t' {
 		l.readChar()
 	}
+}
+
+// Like readChar, the only difference is that it would only peek, without incrementing the position of the lexer
+func (l *Lexer) peekChar() byte{
+	if (l.readPosition >= len(l.input)){
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
+func newToken(tokType token.TokenType, lit string) token.Token {
+	return token.Token{ Type: tokType, Literal: lit }
 }

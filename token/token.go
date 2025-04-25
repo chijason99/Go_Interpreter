@@ -22,11 +22,12 @@ const (
 	NEGATION = "!"
 	SLASH    = "/"
 
-	GT       = ">"
-	LT       = "<"
-	GE       = ">="
-	LE       = "<="
-	NOTEQUAL = "!="
+	GT     = ">"
+	LT     = "<"
+	GE     = ">="
+	LE     = "<="
+	EQ     = "=="
+	NOT_EQ = "!="
 
 	// DELIMITERS
 	COMMA     = ","

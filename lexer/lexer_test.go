@@ -55,6 +55,11 @@ func Test_Next_Token(t *testing.T){
 		}
 
 		let result = add(five, ten);
+
+		10 == 10;
+		9 != 10;
+		9 <= 10;
+		10 >= 9;
 	`
 
 	testCases := []struct {
@@ -131,6 +136,28 @@ func Test_Next_Token(t *testing.T){
 		{ token.IDENT, "five"},
 		{ token.COMMA, ","},
 		{ token.IDENT, "ten"},
+		{ token.RPAREN, ")"},
+		{ token.SEMICOLON, ";"},
+
+		{ token.INT, "10"},
+		{ token.EQ, "=="},
+		{ token.INT, "10"},
+		{ token.SEMICOLON, ";"},
+
+		{ token.INT, "9"},
+		{ token.NOT_EQ, "!="},
+		{ token.INT, "10"},
+		{ token.SEMICOLON, ";"},
+
+		{ token.INT, "9"},
+		{ token.LE, "<="},
+		{ token.INT, "10"},
+		{ token.SEMICOLON, ";"},
+
+		{ token.INT, "10"},
+		{ token.GE, ">="},
+		{ token.INT, "9"},
+		{ token.SEMICOLON, ";"},
 	}
 
 	l := New(input)
